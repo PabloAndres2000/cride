@@ -1,0 +1,1 @@
+.envs -> Here you can find the environment variables, you can see who accesses them in settings
