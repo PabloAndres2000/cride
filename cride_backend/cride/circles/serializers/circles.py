@@ -1,5 +1,4 @@
 # Django REST Framework
-from email.policy import default
 from rest_framework import serializers
 
 # Model
@@ -29,6 +28,16 @@ class CircleModelSerializer(serializers.ModelSerializer):
             'is_limited',
             'members_limit',
         )
+        read_only_fields = (
+            'is_public',
+            'verified',
+            'rides_taken',
+        )
 
     def validate(self, data):
-        """ENsure both members_limit and is_limited are present"""
+        """Ensure both members_limit and is_limited are present"""
+        members_limit = data.get('members_limit', None)
+        is_limited = data.get('is_limited', False)
+        if is_limited ^ bool(members_limit):
+            raise serializers.ValidationError('If circle is limited, a member limit must be provided')
+        return data
